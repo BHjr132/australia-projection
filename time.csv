@@ -1,4 +1,4 @@
-forecastdate,state,primarydate,total,libvote,labvote,grnvote,onpvote,othvote,libseats,labseats,grnseats,onpseats,othseats
+forecastdate,state,primarydate,total,liberalvote,laborvote,greensvote,onenationvote,othervote,liberalseats,laborseats,greensseats,onenationseats,otherseats
 1/01/2020,ACT,,3,34,44.3,21.8,0,0,0,3,0,0,0
 1/01/2020,Tasmania,,5,41.3,40.3,15.3,3.1,0,2,2,0,0,1
 1/01/2020,South Australia,,10,47.2,39.7,13.1,0,0,4,5,0,0,1
