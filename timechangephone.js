@@ -14,11 +14,11 @@ var lineStroke = "4px"
 var axisPad = 12 // axis formatting
 var R = 7 //legend marker
 
-var category = ["Trump", "Democrats", "3rd Party"]
+var category = ["Coalition", "Labor", "Greens", "One Nation"]
 // since Category B and E are really close to each other, assign them diverging colors
 var colorScale = d3.scaleOrdinal()
   .domain(category)
-  .range(["#FF6060", "#0091FF", "#FFE130"])
+  .range(["#FF6060", "#0091FF", "#32CD32", "#FFE130"])
 
 d3.csv("time.csv", function (error, data) {
 
@@ -38,7 +38,7 @@ d3.csv("time.csv", function (error, data) {
   console.log(dataArray)
 
 
-  var mindate = new Date(2019, 10, 1),
+  var mindate = new Date(2020, 0, 0),
     maxdate = new Date(2020, 10, 3);
 
   var maxYVal = Math.round(d3.max(data, d => d.percentage));
