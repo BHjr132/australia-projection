@@ -125,9 +125,8 @@ d3.csv("time.csv", function (error, data) {
 
 
 
-    var mindate = new Date(2019, 5, 1),
-        maxdate = d3.max(data, d => d.primarydate)
-    demadjust = new Date(2020, 0, 4);
+    var mindate = new Date(2020, 0, 1),
+        maxdate = d3.max(data, d => d.forecastdate)
 
     var x = d3.scaleTime()
         .rangeRound([margin.left, width - margin.right])
@@ -358,7 +357,7 @@ d3.csv("time.csv", function (error, data) {
         }
     }
 
-    var cands = ["Coalition", "Labor", "Greens,", "One Nation", "Others"]
+    var cands = ["Coalition", "Labor", "Greens", "One Nation", "Others"]
 
     var svgLegend = svg.append('g')
         .attr('class', 'gLegend')
