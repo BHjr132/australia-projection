@@ -1,45 +1,50 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<meta name="twitter:card" content="summary_large_image">
-	<meta name="twitter:site" content="@jhkforecast">
-	<meta name="twitter:creator" content="@jhkersting">
-	<meta name="twitter:title" content="Rhode Island Primary">
-	<meta name="twitter:description" content="Who is leading the race for the Rhode Island Primary">
-	<meta name="twitter:image"
-		content="https://jhkforecasts.com/democratic_primary-02.png">
-	<title>Rhode Island Primary</title>
-	<script data-ad-client="ca-pub-8025120308040073" async
-		src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-140782021-2"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-
-    gtag('config', 'UA-140782021-2');
-  </script>
-  <script data-ad-client="ca-pub-8025120308040073" async
-    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <link rel="icon" href="https://jkstats76.files.wordpress.com/2019/02/cropped-site-icon.png?w=32" sizes="32x32">
-  <link rel="icon" href="https://jkstats76.files.wordpress.com/2019/02/cropped-site-icon.png?w=192" sizes="192x192">
-
-  <script src="https://d3js.org/d3.v4.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
-  <link rel="stylesheet" href="https://use.typekit.net/htk2wjy.css">
-  <link rel="stylesheet" href="index.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Rhode Island</title>
 </head>
+<head><!-- Global site tag (gtag.js) - Google Analytics -->
+	<script data-ad-client="ca-pub-8025120308040073" async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-140782021-2"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
 
+            gtag('config', 'UA-140782021-2');
+        </script>
+	<link rel="icon" href="https://jkstats76.files.wordpress.com/2019/02/cropped-site-icon.png?w=32" sizes="32x32">
+	<link rel="icon" href="https://jkstats76.files.wordpress.com/2019/02/cropped-site-icon.png?w=192" sizes="192x192">
 
-<a href="https://jhkforecasts.com">
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
+	<link rel="stylesheet" href="https://use.typekit.net/htk2wjy.css">
+	<link rel="stylesheet" href="index.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+    
+        
+      
+
+        
+<body>
+  <script>
+    var keyState="Rhode Island"
+      </script>
+  <a href="https://jhkforecasts.com">
   <h1 style="font-weight: 300;text-align: center;">JHK Forecasts</h1>
 </a>
- 
+  <!-- <a class="computer" href="https://jhkforecasts.com"><img  style="height: 75px;margin-left: auto;display: block;margin-right: auto;"src="https://raw.githubusercontent.com/jhkersting/jhkforecasts/master/jhk%20forecasts%20logo-01.jpg"/></a>
+    <a class="phone" href="https://jhkforecasts.com"><img  style="height: 50px;margin-left: auto;display: block;margin-right: auto;"src="https://jkstats76.files.wordpress.com/2019/02/cropped-site-icon.png"/></a>
+    <hr>-->
 
   <div id="bigmenu">
     <table style="border-collapse: collapse; border: none;margin-top: 20px;" cellspacing="0" cellpadding="0"
@@ -92,95 +97,110 @@
     </table>
   </div>
 
+ 
+  <h3 style="font-size:40px;font-weight: 300;text-align:center;">Rhode Island</h1>
+  <hr/>  
+  <h3 style="font-weight: 900;">Chance of winning...</h3>
+  <div id="topline"></div>
+
+  <h3 style="font-weight: 900;">Projected Vote<span style="font-weight: 700;font-size: 15px;"> (80% confidence Intervals)</span></h3>
+  <div id="projected"></div>
+  <div id="phoneprojectedvote"></div>
+
+  <h3 style="font-weight: 900;">State's Voting Record</h3>
+  <div id="pvi"></div>
+   <h3 style="font-weight: 900;">Time Changes</h3>
 
 
-  <h1 style="text-align: center;font-size: 35;font-weight: 900; border-bottom: solid;border-top: solid;border-right: solid;border-left: solid;background-color: darkblue;color: white;">Rhode Island</h1>
-  <script>
-    var keyState = "Rhode Island"
-   </script>
-  
-  
-   <h2 style="font-weight: 800;margin-left: 20px;">Overview</h2>
-   <div class="computer"id="topline"></div><script src="projections.js"></script><div class="phone"id="toplinephone"></div><script src="projectionsphone.js"></script><h2 style="font-weight: 800;margin-left: 20px;">Time Changes</h2><select id="selectboxvote" class="custom-select" style="width:200px;">
-    <option value="vote">Projected Vote Share</option>
-</select>
-<div id="vote"></div>
-<select id="selectboxwin" class="custom-select" style="width:200px;">
-  <option value="Win">Win State</option>
-</select>
-<div id="win"></div>
-<select id="selectboxdelegates" class="custom-select" style="width:200px;">
-  <option value="Delegates">Projected Delegates</option>
-</select>
-<div id="delegates"></div>
-<div style="text-align:center ;">
-  <button class="btn default" onclick="votefunc()" id="votebutton">Projected Vote Share</button>
-  <button class="btn default" onclick="winfunc()" id="winbutton">Win Rhode Island</button>
-  <button class="btn default" onclick="delegatesfunc()" id="winbutton">Projected Delegates</button>
-</div>
+      <div class="computer">
+      <table  style="border-collapse: collapse; border: none;text-align: center;"  cellspacing="0" cellpadding="0" width="100%">
+        <tbody>
+        <tr>
+        </td>
+        <td style="width: 2%; " valign="top" width="2%"></td>
 
-	<script>
-		
-		function votefunc() {
-			var vote = document.getElementById("vote");
-			var win = document.getElementById("win");
-			var delegates = document.getElementById("delegates");
-			
+        </td>
+        </td>
+        <td style="width: 48%; " valign="top" width="48%">
+        <div id="chart1"></div>
+        </td>
 
-			vote.style.display = "inline";
-				win.style.display = "none";
-				delegates.style.display = "none";
-    }
-    function winfunc() {
-    var vote = document.getElementById("vote");
-    var win = document.getElementById("win");
-    var delegates = document.getElementById("delegates");
-    
-
-    vote.style.display = "none";
-      win.style.display = "inline";
-      delegates.style.display = "none";
-  }
-  function delegatesfunc() {
-    var vote = document.getElementById("vote");
-    var win = document.getElementById("win");
-    var delegates = document.getElementById("delegates");
-    
-
-    vote.style.display = "none";
-      win.style.display = "none";
-      delegates.style.display = "inline";
-  }
-  </script>
-
-
-<script src="wintime.js"></script>
-<script src="delegatestime.js"></script> 
-<script src="votetime.js"></script> 
-
-  
-  <h2 style="font-weight: 800;margin-left: 20px;">Similar States</h2>
-  
-  <div id="usmap"></div>
-  <script src="statemaps.js"></script>
-  <h2 style="font-weight: 800;margin-left: 20px;">Latest Polls</h2>
-  <div id = "polls"></div><script src="polls.js"></script>
-  
-  <script src="bubblemap.js"></script>
-  <div style="height: 70px;background-color: darkblue;width: 102%;margin-left: -10px;margin-bottom: -10px;">
-    <h4 style="font-weight: 400;color: white;padding-top: 30px;margin-left: 30;">© 2020 JHK FORECASTS</h4>
-  </div>
-  
-  
-
-  
-  
-  </body>
-
-
-
-
-
+        <td style="width: 48%; " valign="top" width="48%">
+        <div id="chart2"></div>
+        </td>
+        <td style="width: 2%; " valign="top" width="2%"></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+      <div class="phone">
+      <div id="chart3"></div>
+      <div id="chart4"></div>
+      </div>
+      <h3 style="font-weight: 900;">Experts Ratings</h3>
+      <div id="experts"></div>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-format="fluid"
+     data-ad-layout-key="-h2+d+5c-9-3e"
+     data-ad-client="ca-pub-8025120308040073"
+     data-ad-slot="8603820464"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+      <h3 style="font-weight: 900;">Similar States</h3>
+      <div id="statesim"></div>
+      <h3 style="font-weight: 900;">Vote Calculations</h3>
+      <div id="votecalcs"></div>
+      
+      <h3 style="font-weight: 900;">Latest Polls</h3>
+      <div id="polls"></div> 
+      </div>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-format="fluid"
+     data-ad-layout-key="-h2+d+5c-9-3e"
+     data-ad-client="ca-pub-8025120308040073"
+     data-ad-slot="8603820464"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-format="fluid"
+     data-ad-layout-key="-h2+d+5c-9-3e"
+     data-ad-client="ca-pub-8025120308040073"
+     data-ad-slot="8603820464"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-format="fluid"
+     data-ad-layout-key="-h2+d+5c-9-3e"
+     data-ad-client="ca-pub-8025120308040073"
+     data-ad-slot="8603820464"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+      
+<script src="polls.js"></script>
+<script src="pollsphones.js"></script>
+<script src="partisanlean.js"></script>
+<script src="statetopline.js"></script>
+<script src="statevotecharts.js"></script>
+<script src="time1.js"></script>
+<script src="time2.js"></script>
+<script src="time3.js"></script>
+<script src="time4.js"></script>
+<script src="vote calcs.js"></script>
+<script src="projectedvotecurve.js"></script>	
+<script src="phonestatevote.js"></script>	
+<script src="statesim.js"></script>
+<script src="experts.js"></script>    
 </body>
-
 </html>

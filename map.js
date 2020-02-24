@@ -1,33 +1,41 @@
 
-var category = ["Biden", "Bloomberg", "Booker", "Buttigieg", "Klobuchar", "Sanders", "Steyer", "Warren", "Yang"]
+/*  This visualization was made possible by modifying code provided by:
+ 
+Scott Murray, Choropleth example from "Interactive Data Visualization for the Web" 
+https://github.com/alignedleft/d3-book/blob/master/chapter_12/05_choropleth.html   
+    
+Malcolm Maclean, tooltips example tutorial
+http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
+ 
+Mike Bostock, Pie Chart Legend
+http://bl.ocks.org/mbostock/3888852  */
 
-var color = d3.scaleOrdinal()
-  .domain(category)
-  .range(["#00C181", "#FF6060", "#a4b1b5", "#FFE130", "#FF8D32", "#0091FF", "#FF2EF0", "#AF0BFF", "#a4b1b5"])
 
-var candidate_color = color(keycand)
-
+//Width and height of map
 var width3 = 1020;
 var height3 = 500;
 
-
+// D3 Projection
 var projection = d3.geoAlbersUsa()
-  .translate([width3 / 2, height3 / 2])  
-  .scale([900]);         
+  .translate([width3 / 2, height3 / 2])    // translate to center of screen
+  .scale([900]);          // scale things down so see entire US
 
-var path = d3.geoPath()            
-  .projection(projection);  
-
-  var color = d3.scaleLinear()
-  .domain([0,30])
-  .range(["white", candidate_color ])
+// Define path generator
+var path = d3.geoPath()               // path generator that will convert GeoJSON to SVG paths
+  .projection(projection);  // tell path generator to use albersUsa projection
 
 
+// Define linear scale for output
+var color = d3.scaleLinear()
+  .domain([0, 50, 100])
+  .range(["#0091FF", "white", "#FF6060"]);
 
 
+
+//Create SVG element and append map to the SVG
 var svg = d3.select("#usmap")
   .append("svg")
-  .attr("viewBox", '50 20 920 480');
+  .attr("viewBox", '100 50 820 450');
 
 
 
@@ -39,21 +47,25 @@ var tool_tip = d3.tip()
 svg.call(tool_tip);
 
 
-d3.csv("map.csv", function (data) {
-  var data = data.filter(function (d) { return d.cand == keycand; })
+// Load in my states data!
+d3.csv("US Map.csv", function (data) {
+  var res = data.map((d, i) => {
 
-  
+  })// setting the range of the input data
+
+  // Load GeoJSON data and merge with states data
   d3.json("us-states.json", function (json) {
 
-
-
+    // Loop through each state data value in the .csv file
     for (var i = 0; i < data.length; i++) {
 
+      // Grab State Name
       var dataState = data[i].state;
 
-      var vote = data[i].vote
+      // Grab data value 
+      var gopwin = data[i].gopWin
 
-      var delegate = data[i].delegates
+      var demwin = data[i].demWin
 
       var label = data[i].label
 
@@ -61,27 +73,32 @@ d3.csv("map.csv", function (data) {
 
       var yvalue = data[i].yValue
 
-        ;
+      var tippingpoint = data[i].tippingPoint;
 
+      // Find the corresponding state inside the GeoJSON
       for (var j = 0; j < json.features.length; j++) {
         var jsonState = json.features[j].properties.name;
 
         if (dataState == jsonState) {
 
-          json.features[j].properties.vote = vote
-
-          json.features[j].properties.delegate = delegate
+          // Copy the data value into the JSON
+          json.features[j].properties.gopWin = gopwin
+          json.features[j].properties.tippingPoint = tippingpoint
+          json.features[j].properties.demWin = demwin
           json.features[j].properties.xValue = xvalue
           json.features[j].properties.yValue = yvalue
           json.features[j].properties.label = label
             ;
 
+          // Stop looking through the JSON
 
           break;
         }
       }
     }
     console.log(json.features)
+    console.log(data)
+    // Bind the data to the SVG and create one path per GeoJSON feature
     svg.selectAll("path")
       .data(json.features)
       .enter()
@@ -92,191 +109,127 @@ d3.csv("map.csv", function (data) {
       .attr("d", path)
       .style("stroke", "#fff")
       .style("stroke-width", "1")
-      .style("fill", function (d) { return color(d.properties.vote); })
+      .style("fill", d => color(d.properties.gopWin))
       .attr("text-anchor", "middle").on('mouseover', function (d) {
-
-        d3.select(this)
-          .style("opacity", .3)
 
 
         tool_tip.show();
         var tipSVG = d3.select("#tipDiv")
           .append("svg")
-          .attr("width", 170)
+          .attr("width", 175)
           .attr("height", 120)
           ;
+        tipSVG.append("rect")
+          .attr("y1", 0)
+          .attr("x1", 0)
+          .attr("width", 175)
+          .attr("height", 120)
+          .attr("rx", 8)
+          .attr("fill", "white")
+          .attr("stroke", "black")
+          .attr("stroke-width", 2)
 
 
+        tipSVG.append("rect")
+          .attr("fill", "#FF6060")
+          .attr("y", 50)
+          .attr("x", 5)
+          .attr("width", 0)
+          .attr("height", 20)
+          .transition()
+          .duration(300)
+          .attr("width", d.properties.gopWin);
+
+        tipSVG.append("text")
+          .text("Gop Win" + "%")
+          .attr("y", 45)
+          .attr("x", 5),
+
+          tipSVG.append("text")
+            .text(d.properties.name)
+            .attr("y", 20)
+            .attr("x", 10)
+            .attr("fill", "#black")
+            .style("font-weight", "600")
+            .style("font-size", "20");
+
+        tipSVG.append("text")
+          .text("Dem Win" + "%")
+          .attr("y", 105)
+          .attr("x", 5);
 
 
         tipSVG.append("text")
-          .text(d.properties.name)
-          .attr("y", 20)
-          .attr("x", 85)
-          .attr("fill", "#black")
+          .text(d.properties.gopWin + "%")
+          .attr("y", 65)
+          .attr("x", 5)
+
+          .attr("x", 110)
+          .attr("fill", "#FF6060")
           .style("font-weight", "600")
-          .style("font-size", "20")
-          .style("text-anchor", "middle");
+          .style("font-size", "15");
+
+        tipSVG.append("rect")
+          .attr("fill", "#0091FF")
+          .attr("y", 70)
+          .attr("x", 5)
+          .attr("width", 0)
+          .attr("height", 20)
+          .transition()
+          .duration(300)
+          .attr("width", d.properties.demWin);
 
         tipSVG.append("text")
-          .text(d.properties.vote+"%")
-          .attr("y", 50)
-          .attr("x", 150)
-          .attr("fill", "#black")
+          .text(d.properties.demWin + "%")
+          .attr("y", 85)
+          .attr("x", 5)
+          .attr("x", 110)
+          .attr("fill", "#0091FF")
           .style("font-weight", "600")
-          .style("font-size", "15")
-          .style("text-anchor", "end");
-
-          tipSVG.append("text")
-          .text(d.properties.delegate)
-          .attr("y", 80)
-          .attr("x", 150)
-          .attr("fill", "#black")
-          .style("font-weight", "600")
-          .style("font-size", "15")
-          .style("text-anchor", "end");
-
-          tipSVG.append("text")
-          .text("Vote Share -->")
-          .attr("y", 50)
-          .attr("x", 20)
-          .attr("fill", "#black")
-          .style("font-weight", "600")
-          .style("font-size", "15")
-          .style("text-anchor", "start");
-
-          tipSVG.append("text")
-          .text("Delegates -->")
-          .attr("y", 80)
-          .attr("x", 20)
-          .attr("fill", "#black")
-          .style("font-weight", "600")
-          .style("font-size", "15")
-          .style("text-anchor", "start");
-
-
+          .style("font-size", "15");
       })
       .on('mouseout',
         function (d) {
 
           d3.select(this)
-            .style("opacity", 1)
+            .style("fill", function (d) { return color(d.properties.gopWin); })
 
           tool_tip.hide()
         });
 
 
-
+    svg.selectAll("path2")
+      .data(json.features)
+      .enter()
+      .append("path")
+      .attr("class", "states")
+      .attr("d", path)
+      .style("stroke", d => d.properties.tippingPoint >= 3 ? "black" : "none")
+      .style("stroke-width", "1.5")
+      .style("fill", "none")
 
     svg.append("rect")
       .attr("x", 850)
-      .attr("y", 250)
+      .attr("y", 350)
       .attr("width", 20)
       .attr("height", 20)
+      .style("stroke", "black")
+      .style("stroke-width", 2)
       .attr("ry", "6")
-      .style("fill", color(10));
-    svg.append("rect")
-      .attr("x", 850)
-      .attr("y", 270)
-      .attr("width", 20)
-      .attr("height", 20)
-      .attr("ry", "6")
-      .style("fill", color(20));
-    svg.append("rect")
-      .attr("x", 850)
-      .attr("y", 290)
-      .attr("width", 20)
-      .attr("height", 20)
-      .attr("ry", "6")
-      .style("fill", color(30));
-    svg.append("rect")
-      .attr("x", 850)
-      .attr("y", 310)
-      .attr("width", 20)
-      .attr("height", 20)
-      .attr("ry", "6")
-      .style("fill", color(40));
-    svg.append("rect")
-      .attr("x", 850)
-      .attr("y", 330)
-      .attr("width", 20)
-      .attr("height", 20)
-      .attr("ry", "6")
-      .style("fill", color(50));
+      .style("fill", "none");
 
-
-      svg.append("text")
-      .text(keycand+"'s Vote Share")
-      .attr("x", 600)
-      .attr("y", 60)
-      .attr("font-family", "brandon-grotesque")
-      .attr("font-weight", "700")
-      .attr("font-size", "30")
+    svg.append("text")
+      .text("Tipping Points")
+      .attr("x", 760)
+      .attr("y", 365)
       .attr("fill", "black")
-      .attr("text-anchor", "middle")
+      .style("font-weight", "500")
+      .style("font-size", "15");
 
 
-    svg.append("text")
-      .text("Vote Share")
-      .attr("x", 860)
-      .attr("y", 240)
-      .attr("font-family", "brandon-grotesque")
-      .attr("font-weight", "700")
-      .attr("font-size", "10")
-      .attr("fill", "black")
-      .attr("text-anchor", "middle")
-    svg.append("text")
-      .text("10%")
-      .attr("x", 860)
-      .attr("y", 263)
-      .attr("font-family", "brandon-grotesque")
-      .attr("font-weight", "700")
-      .attr("font-size", "10")
-      .attr("fill", "black")
-      .attr("text-anchor", "middle")
-    svg.append("text")
-      .text("20%")
-      .attr("x", 860)
-      .attr("y", 283)
-      .attr("font-family", "brandon-grotesque")
-      .attr("font-weight", "700")
-      .attr("font-size", "10")
-      .attr("fill", "black")
-      .attr("text-anchor", "middle")
-    svg.append("text")
-      .text("30%")
-      .attr("x", 860)
-      .attr("y", 303)
-      .attr("font-family", "brandon-grotesque")
-      .attr("font-weight", "700")
-      .attr("font-size", "10")
-      .attr("fill", "black")
-      .attr("text-anchor", "middle")
-    svg.append("text")
-      .text("40%")
-      .attr("x", 860)
-      .attr("y", 323)
-      .attr("font-family", "brandon-grotesque")
-      .attr("font-weight", "700")
-      .attr("font-size", "10")
-      .attr("fill", "white")
-      .attr("text-anchor", "middle")
-    svg.append("text")
-      .text("50+%")
-      .attr("x", 860)
-      .attr("y", 343)
-      .attr("font-family", "brandon-grotesque")
-      .attr("font-weight", "700")
-      .attr("font-size", "8")
-      .attr("fill", "white")
-      .attr("text-anchor", "middle")
+    d3.csv("US Map.csv", function (error, data) {
 
 
-
-
-    d3.csv("map.csv", function (error, data) {
-
-      var data = data.filter(function (d) { return d.cand == keycand; })
 
 
       svg.selectAll("labels")
@@ -289,7 +242,7 @@ d3.csv("map.csv", function (data) {
         .attr("font-family", "brandon-grotesque")
         .attr("font-weight", "700")
         .attr("font-size", "10")
-        .attr("fill", d => d.vote > 35 ? "white" : "black")
+        .attr("fill", "black")
         .attr("text-anchor", "middle")
 
 

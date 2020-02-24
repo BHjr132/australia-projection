@@ -1,30 +1,30 @@
 var ratingscale = d3.scaleOrdinal()
-  .domain(["Solid D","Likely D","Lean D","Tilt D","Tossup","Tilt R","Lean R","Likely R","Solid R"])
-  .range(["white", "#FF6060"]);
+  .domain(["Solid D", "Likely D", "Lean D", "Tilt D", "Tossup", "Tilt R", "Lean R", "Likely R", "Solid R"])
+  .range(["#1079FE", "#56aefe","#88c8fe","#c3e4ff","#f1d5ff","#fed6d8","#feb0b1","#fd8a8d","fd464d"]);
 
 
 
 d3.csv("experts.csv", function (error, data) {
 
-  
 
-  var data = data.filter(function (d) { return d.State == keyState; })
+
+  var data = data.filter(function (d) { return d.state == keyState; })
 
 
   var data = data.map((d, i) => {
     return {
       expert: d.expert,
       rating: d.rating,
-      margin: +d.rating
+      margin: +d.margin
 
     }
   })
 
   var svg = d3.select("#experts").append("svg")
-    .attr("viewBox", "0 0 1000 500")
+    .attr("viewBox", "0 0 800 400")
     .append('g')
 
-  
+
 
 
   var svgLegend = svg.append('g')
@@ -43,326 +43,65 @@ d3.csv("experts.csv", function (error, data) {
 
   legend.append("text")
     .attr("class", "legend-text")
-    .attr("x", 0)
-    .attr("y", -10)
+    .attr("x", d => d.expert == "Adjusted Margin" ? 500 : 50)
+    .attr("y", 0)
     .style("fill", "Black")
     .style("font-size", 15)
     .attr("font-weight", 500)
-    .text(d => d.Pollster)
+    .text(d => d.expert)
     .attr("text-anchor", "start")
-    .call(wrap,275)
 
-  legend.append("rect")
-    .attr("x", 275)
-    .attr("y", -30)
-    .attr("width", 1000)
-    .attr("height", 50)
-    .style("fill", "white")
-
-
-  legend.append("text")
-    .attr("class", "legend-text")
-    .attr("x", 300)
-    .attr("y", 0)
-    .style("fill", "Black")
-    .style("font-size", 15)
-    .attr("font-weight", 700)
-    .text(d => d.Grade)
-    .attr("text-anchor", "middle")
-
-  legend.append("text")
-    .attr("class", "legend-text")
-    .attr("x", 350)
-    .attr("y", 0)
-    .style("fill", "Black")
-    .style("font-size", 10)
-    .attr("font-weight", 700)
-    .text(d => d.Date)
-    .attr("text-anchor", "middle")
-
-  legend.append("text")
-    .attr("class", "legend-text")
-    .attr("x", 395)
-    .attr("y", 0)
-    .style("fill", "Black")
-    .style("font-size", 10)
-    .attr("font-weight", 700)
-    .text(d => d.Sample)
-    .attr("text-anchor", "middle")
-
-  legend.append("circle")
-    .attr("cx", 440)
-    .attr("cy", -3.5)
-    .attr("r", 15)
-    .attr("fill", d => weightScale(d.weight))
-
-  legend.append("text")
-    .attr("class", "legend-text")
-    .attr("x", 440)
-    .attr("y", 0)
-    .style("fill", "Black")
-    .style("font-size", 10)
-    .attr("font-weight", 700)
-    .text(d => d.weight ==0 ? "-":d.weight)
-    .attr("text-anchor", "middle")
-
-
-
-  legend.append("rect")
-    .attr("x", 475)
-    .attr("y", -30)
-    .attr("width", 50)
-    .attr("height", 50)
-    .style("fill", d => demScale(d.Biden))
-
-  legend.append("rect")
-    .attr("x", 525)
-    .attr("y", -30)
-    .attr("width", 50)
-    .attr("height", 50)
-    .style("fill", d => demScale(d.Bloomberg))
-  legend.append("rect")
-    .attr("x", 575)
-    .attr("y", -30)
-    .attr("width", 50)
-    .attr("height", 50)
-    .style("fill", d => demScale(d.Booker))
-
-  legend.append("rect")
-    .attr("x", 625)
-    .attr("y", -30)
-    .attr("width", 50)
-    .attr("height", 50)
-    .style("fill", d => demScale(d.Buttigieg))
-
-  legend.append("rect")
-    .attr("x", 675)
-    .attr("y", -30)
-    .attr("width", 50)
-    .attr("height", 50)
-    .style("fill", d => demScale(d.Klobuchar))
-
-  legend.append("rect")
-    .attr("x", 725)
-    .attr("y", -30)
-    .attr("width", 50)
-    .attr("height", 50)
-    .style("fill", d => demScale(d.Sanders))
-
-  legend.append("rect")
-    .attr("x", 775)
-    .attr("y", -30)
-    .attr("width", 50)
-    .attr("height", 50)
-    .style("fill", d => demScale(d.Steyer))
-
-  legend.append("rect")
-    .attr("x", 825)
-    .attr("y", -30)
-    .attr("width", 50)
-    .attr("height", 50)
-    .style("fill", d => demScale(d.Warren))
-
-  legend.append("rect")
-    .attr("x", 875)
-    .attr("y", -30)
-    .attr("width", 50)
-    .attr("height", 50)
-    .style("fill", d => demScale(d.Yang))
-
-  legend.append("text")
-    .attr("class", "legend-text")
-    .attr("x", 500)
-    .attr("y", 0)
-    .style("fill", "Black")
-    .style("font-size", 15)
-    .attr("font-weight", 700)
-    .text(d => d.Biden + "%")
-    .attr("text-anchor", "middle")
-  legend.append("text")
-    .attr("class", "legend-text")
-    .attr("x", 550)
-    .attr("y", 0)
-    .style("fill", "Black")
-    .style("font-size", 15)
-    .attr("font-weight", 700)
-    .text(d => d.Bloomberg + "%")
-    .attr("text-anchor", "middle")
-  legend.append("text")
-    .attr("class", "legend-text")
-    .attr("x", 600)
-    .attr("y", 0)
-    .style("fill", "Black")
-    .style("font-size", 15)
-    .attr("font-weight", 700)
-    .text(d => d.Booker + "%")
-    .attr("text-anchor", "middle")
-  legend.append("text")
-    .attr("class", "legend-text")
-    .attr("x", 650)
-    .attr("y", 0)
-    .style("fill", "Black")
-    .style("font-size", 15)
-    .attr("font-weight", 700)
-    .text(d => d.Buttigieg + "%")
-    .attr("text-anchor", "middle")
   legend.append("text")
     .attr("class", "legend-text")
     .attr("x", 700)
     .attr("y", 0)
-    .style("fill", "Black")
+    .style("fill", d => ratingscale(d.rating))
     .style("font-size", 15)
     .attr("font-weight", 700)
-    .text(d => d.Klobuchar + "%")
+    .text(d => d.rating == 0 ? "" : d.rating)
     .attr("text-anchor", "middle")
-  legend.append("text")
+
+    legend.append("text")
     .attr("class", "legend-text")
-    .attr("x", 750)
+    .attr("x", 700)
     .attr("y", 0)
-    .style("fill", "Black")
+    .style("fill", d=>d.margin>0?"#FF6060":"#0091FF")
     .style("font-size", 15)
     .attr("font-weight", 700)
-    .text(d => d.Sanders + "%")
+    .text(d => d.expert == "Adjusted Margin" ? d.margin > 0 ? "R+ "+d.margin:"D+ "+Math.abs(d.margin):"")
     .attr("text-anchor", "middle")
-  legend.append("text")
-    .attr("class", "legend-text")
-    .attr("x", 800)
-    .attr("y", 0)
-    .style("fill", "Black")
-    .style("font-size", 15)
-    .attr("font-weight", 700)
-    .text(d => d.Steyer + "%")
-    .attr("text-anchor", "middle")
-  legend.append("text")
-    .attr("class", "legend-text")
-    .attr("x", 850)
-    .attr("y", 0)
-    .style("fill", "Black")
-    .style("font-size", 15)
-    .attr("font-weight", 700)
-    .text(d => d.Warren + "%")
-    .attr("text-anchor", "middle")
-  legend.append("text")
-    .attr("class", "legend-text")
-    .attr("x", 900)
-    .attr("y", 0)
-    .style("fill", "Black")
-    .style("font-size", 15)
-    .attr("font-weight", 700)
-    .text(d => d.Yang + "%")
-    .attr("text-anchor", "middle")
+
 
 
 
   svg.append("text")
-    .attr("x", 20)
-    .attr("y", 40)
+    .attr("x", 50)
+    .attr("y", 50)
     .style("fill", "Black")
     .style("font-size", 15)
     .attr("font-weight", 500)
-    .text("Pollster")
+    .text("Expert")
     .attr("text-anchor", "start")
 
-
-  svg.append("text")
-    .attr("x", 300)
-    .attr("y", 40)
-    .style("fill", "Black")
-    .style("font-size", 15)
-    .attr("font-weight", 500)
-    .text("Grade")
-    .attr("text-anchor", "middle")
-
-  svg.append("text")
-    .attr("x", 350)
-    .attr("y", 40)
-    .style("fill", "Black")
-    .style("font-size", 15)
-    .attr("font-weight", 500)
-    .text("Date")
-    .attr("text-anchor", "middle")
-
-  svg.append("text")
-    .attr("x", 440)
-    .attr("y", 40)
-    .style("fill", "Black")
-    .style("font-size", 12)
-    .attr("font-weight", 500)
-    .text("Weight")
-    .attr("text-anchor", "middle")
-  svg.append("text")
-    .attr("x", 500)
-    .attr("y", 40)
-    .style("fill", "Black")
-    .style("font-size", 10)
-    .attr("font-weight", 500)
-    .text("Biden")
-    .attr("text-anchor", "middle")
-  svg.append("text")
-    .attr("x", 550)
-    .attr("y", 40)
-    .style("fill", "Black")
-    .style("font-size", 10)
-    .attr("font-weight", 500)
-    .text("Bloomberg")
-    .attr("text-anchor", "middle")
-  svg.append("text")
-    .attr("x", 600)
-    .attr("y", 40)
-    .style("fill", "Black")
-    .style("font-size", 10)
-    .attr("font-weight", 500)
-    .text("Booker")
-    .attr("text-anchor", "middle")
-
-  svg.append("text")
-    .attr("x", 650)
-    .attr("y", 40)
-    .style("fill", "Black")
-    .style("font-size", 10)
-    .attr("font-weight", 500)
-    .text("Buttigieg")
-    .attr("text-anchor", "middle")
-  svg.append("text")
+    svg.append("text")
     .attr("x", 700)
-    .attr("y", 40)
+    .attr("y", 50)
     .style("fill", "Black")
-    .style("font-size", 10)
+    .style("font-size", 15)
     .attr("font-weight", 500)
-    .text("Klobuchar")
+    .text("Rating")
     .attr("text-anchor", "middle")
-  svg.append("text")
-    .attr("x", 750)
-    .attr("y", 40)
+
+
+    svg.append("text")
+    .attr("x", 630)
+    .attr("y", 340)
     .style("fill", "Black")
-    .style("font-size", 10)
-    .attr("font-weight", 500)
-    .text("Sanders")
+    .style("font-size", 20)
+    .attr("font-weight", 900)
+    .text("-->")
     .attr("text-anchor", "middle")
-  svg.append("text")
-    .attr("x", 800)
-    .attr("y", 40)
-    .style("fill", "Black")
-    .style("font-size", 10)
-    .attr("font-weight", 500)
-    .text("Steyer")
-    .attr("text-anchor", "middle")
-  svg.append("text")
-    .attr("x", 850)
-    .attr("y", 40)
-    .style("fill", "Black")
-    .style("font-size", 10)
-    .attr("font-weight", 500)
-    .text("Warren")
-    .attr("text-anchor", "middle")
-  svg.append("text")
-    .attr("x", 900)
-    .attr("y", 40)
-    .style("fill", "Black")
-    .style("font-size", 10)
-    .attr("font-weight", 500)
-    .text("Yang")
-    .attr("text-anchor", "middle")
+
   legend.append("line")
     .attr("x1", 0)
     .attr("x2", 950)
@@ -379,27 +118,4 @@ d3.csv("experts.csv", function (error, data) {
     .attr("stroke-width", 2)
     .attr("stroke", "black")
 
-    function wrap(text, width) {
-      text.each(function() {
-        var text = d3.select(this),
-            words = text.text().split(/\s+/).reverse(),
-            word,
-            line = [],
-            lineNumber = 0,
-            lineHeight = 10, // ems
-            y = text.attr("y"),
-            dy = parseFloat(text.attr("dy")),
-            tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
-        while (word = words.pop()) {
-          line.push(word);
-          tspan.text(line.join(" "));
-          if (tspan.node().getComputedTextLength() > width) {
-            line.pop();
-            tspan.text(line.join(" "));
-            line = [word];
-            tspan = text.append("tspan").attr("x", 0).attr("y",10).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-          }
-        }
-      });
-    }
 });
