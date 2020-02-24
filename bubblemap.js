@@ -9,10 +9,10 @@ var R = 7
 
 
 var category = ["Biden", "Bloomberg", "Booker", "Buttigieg", "Klobuchar", "Sanders", "Steyer", "Warren", "Yang"]
-// since Category B and E are really close to each other, assign them diverging colors
+
 var color = d3.scaleOrdinal()
   .domain(category)
-  .range(["#00C181", "#FF6060", "#a4b1b5", "#FFC000", "#FF8D32", "#0091FF", "#FF2EF0", "#CD64FF", "#0070C0"])
+  .range(["#00C181", "#FF6060", "#a4b1b5", "#FFE130", "#FF8D32", "#0091FF", "#FF2EF0", "#AF0BFF", "#a4b1b5"])
 var colortwo = d3.scaleOrdinal()
   .domain(category)
   .range(["black", "white", "white", "black", "white", "white", "black", "white", "white"])
@@ -231,26 +231,132 @@ d3.csv("bubblemap.csv", function (error, data) {
     .attr("font-weight", 700)
     .attr("font-size", "8")
     .attr("fill", d => d.completed == 1 ? colortwo(d.first) : "black")
+    .on('mouseover', function (d) {
+      tool_tip.show();
+      var tipSVG = d3.select("#tipDiv")
+        .append("svg")
+        .attr("width", 200)
+        .attr("height", 140);
 
-  svg.append("text")
-    .text("Press on State For Forecast")
-    .attr("x", 200)
-    .attr("y", 80)
-    .attr("text-anchor", "middle")
-    .attr("font-family", "brandon-grotesque")
-    .attr("font-weight", "500")
-    .attr("font-size", "15")
-    .attr("fill", "black")
-  svg.append("text")
-    .text("Democratic Primary")
-    .attr("x", 200)
-    .attr("y", 50)
-    .attr("text-anchor", "middle")
-    .attr("font-family", "brandon-grotesque")
-    .attr("font-weight", "700")
-    .attr("font-size", "20")
-    .attr("fill", "black")
+      tipSVG.append("rect")
+      .attr("x",0)
+      .attr("y",0)
+      .attr("width", 200)
+      .attr("height", 140)
+      .attr("fill","white")
+      .attr("stroke","black")
+      .attr("stroke-width",3)
+      .attr("rx",10)
 
+
+
+      tipSVG.append("text")
+        .text(d.state)
+        .attr("y", 20)
+        .attr("x", 87.5)
+        .attr("fill", "black")
+        .style("font-weight", "600")
+        .style("font-size", "20")
+        .attr("text-anchor", "middle");
+
+      tipSVG.append("text")
+        .text("Candidate")
+        .attr("y", 50)
+        .attr("x", 5)
+        .attr("fill", "black")
+        .style("font-weight", "600")
+        .style("font-size", "15");
+      tipSVG.append("text")
+        .text("Vote Share")
+        .attr("y", 50)
+        .attr("x", 150)
+        .attr("fill", "black")
+        .style("font-weight", "600")
+        .style("font-size", "15")
+        .attr("text-anchor", "middle")
+        ;
+
+
+      tipSVG.append("text")
+        .text(d.first)
+        .attr("y", 70)
+        .attr("x", 5)
+        .attr("fill", color(d.first))
+        .style("font-weight", "600")
+        .style("font-size", "15");
+
+
+      tipSVG.append("text")
+        .text(d.firstvote + "%")
+        .attr("y", 70)
+        .attr("x", 150)
+        .attr("fill", color(d.first))
+        .style("font-weight", "600")
+        .style("font-size", "15")
+        .attr("text-anchor", "middle")
+        ;
+
+      tipSVG.append("text")
+        .text(d.second)
+        .attr("y", 90)
+        .attr("x", 5)
+        .attr("fill", color(d.second))
+        .style("font-weight", "600")
+        .style("font-size", "15");
+
+      tipSVG.append("text")
+        .text(d.secondvote + "%")
+        .attr("y", 90)
+        .attr("x", 150)
+        .attr("fill", color(d.second))
+        .style("font-weight", "600")
+        .style("font-size", "15")
+        .attr("text-anchor", "middle")
+        ;
+
+      tipSVG.append("text")
+        .text(d.third)
+        .attr("y", 110)
+        .attr("x", 5)
+        .attr("fill", color(d.third))
+        .style("font-weight", "600")
+        .style("font-size", "15");
+
+      tipSVG.append("text")
+        .text(d.thirdvote + "%")
+        .attr("y", 110)
+        .attr("x", 150)
+        .attr("fill", color(d.third))
+        .style("font-weight", "600")
+        .style("font-size", "15")
+        .attr("text-anchor", "middle")
+        ;
+
+      tipSVG.append("text")
+        .text(d.fourth)
+        .attr("y", 130)
+        .attr("x", 5)
+        .attr("fill", color(d.fourth))
+        .style("font-weight", "600")
+        .style("font-size", "15")
+
+
+      tipSVG.append("text")
+        .text(d.forthvote + "%")
+        .attr("y", 130)
+        .attr("x", 150)
+        .attr("fill", color(d.fourth))
+        .style("font-weight", "600")
+        .style("font-size", "15")
+        .attr("text-anchor", "middle")
+        ;
+
+
+
+    })
+    .on('mouseout', tool_tip.hide);
+
+  
 
 
 
@@ -286,18 +392,7 @@ d3.csv("bubblemap.csv", function (error, data) {
 
   d3.csv("update.csv", function (error, data) {
 
-    svg.selectAll("updated")
-      .data(data)
-      .enter()
-      .append("text")
-      .text(d => d.updated)
-      .attr("x", 200)
-      .attr("y", 20)
-      .attr("fill", "black")
-      .attr("font-size", 10)
-      .attr("fill", "grey")
-      .attr("text-anchor", "middle")
-      .attr("font-weight", 900)
-      .attr("text-decoration", "underline")
+    var update = data[0].updated
+    document.getElementById("update").innerHTML = update
   })
 })

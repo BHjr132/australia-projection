@@ -1,6 +1,6 @@
-var margin = { top: 20, right: 20, bottom: 100, left: 30 }
-var width = 1000 - margin.left - margin.right
-var height = 550 - margin.top - margin.bottom
+var marginrace = { top: 20, right: 20, bottom: 40, left: 30 }
+var widthrace = 1000 - marginrace.left - marginrace.right
+var heightrace = 450 - marginrace.top - marginrace.bottom
 
 var delScale = d3.scaleLinear()
     .domain([0, 1990])
@@ -9,8 +9,7 @@ var delScale = d3.scaleLinear()
 d3.csv("delegatetime.csv", function (error, data) {
     var keys = data.columns.slice(1);
 
-   
-    var axisPad =7
+    var axisPad = 7
 
     var parseTime = d3.timeParse("%Y-%m-%d"),
         formatDate = d3.timeFormat("%b - %d"),
@@ -20,36 +19,62 @@ d3.csv("delegatetime.csv", function (error, data) {
 
     data.forEach(function (d) {
         d.date = parseTime(d.date);
-     
+
         return d;
     })
 
+    var final_delegates = [data[19]["Biden-"], data[19]["Bloomberg-"], data[19]["Booker-"], data[19]["Buttigieg-"], data[19]["Klobuchar-"], data[19]["Sanders-"], data[19]["Steyer-"], data[19]["Warren-"], data[19]["Yang-"]]
 
 
-    
+
+    var col_category = ["#00C181", "#FF6060", "#a4b1b5", "#FFE130", "#FF8D32", "#0091FF", "#FF2EF0", "#AF0BFF", "#a4b1b5"]
+
+    var cand_now = keys.map(function (d, j) {
+        return {
+            candidate: d,
+            value: final_delegates[j],
+            color: col_category[j]
+        };
+    });
+
+    console.log(cand_now)
+
+    cand_now.sort((a, b) => a.value - b.value)
+    console.log(cand_now)
+    var keys = cand_now.map((d) =>
+        d.candidate
+    )
+    var color_scale = cand_now.map((d) =>
+        d.color)
+
+    var candidates = keys
+
+    var candidates = candidates.map((d) =>
+        d.slice(0, -1)
+    )
+
+    var candidates = candidates.map((d) =>
+        d[0].toUpperCase() + d.substring(1)
+    )
 
     var svg = d3.select("#race").append("svg")
-        .attr("viewBox", "0 0 1000 550")
+        .attr("viewBox", "0 0 1000 450")
         .append('g')
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    
-
-
+        .attr("transform", "translate(" + marginrace.left + "," + marginrace.top + ")");
 
     var mindate = new Date(2020, 1, 1),
         maxdate = new Date(2020, 6, 1)
     demadjust = new Date(2020, 0, 4);
 
     var x = d3.scaleTime()
-        .rangeRound([margin.left, width - margin.right])
+        .rangeRound([marginrace.left, widthrace - marginrace.right])
         .domain([mindate, maxdate])
 
     var y = d3.scaleLinear()
-        .rangeRound([height - margin.bottom, margin.top]);
+        .rangeRound([heightrace - marginrace.bottom, marginrace.top]);
 
     var z = d3.scaleOrdinal()
-        .range(["#00C181", "#FF6060", "#a4b1b5", "#FFC000", "#FF8D32", "#0091FF", "#FF2EF0", "#CD64FF", "#0070C0"])
+        .range(color_scale)
         ;
 
     var line = d3.line()
@@ -59,14 +84,14 @@ d3.csv("delegatetime.csv", function (error, data) {
 
     svg.append("g")
         .attr("class", "x-axis")
-        .attr("transform", "translate(0," + (height - margin.bottom) + ")")
+        .attr("transform", "translate(0," + (heightrace - marginrace.bottom) + ")")
         .call(d3.axisBottom(x).ticks(6)
             .tickFormat(d3.timeFormat("%b")))
         .call(g => {
             var years = x.ticks(d3.timeYear.every(1))
             var xshift = 0
             g.selectAll("text")
-                .style("text-anchor", "right")
+                .style("text-anchor", "start")
                 .attr("y", axisPad)
                 .attr('fill', 'black')
                 .attr('font-size', 15)
@@ -79,11 +104,11 @@ d3.csv("delegatetime.csv", function (error, data) {
 
         })
 
-       
+
 
     svg.append("g")
         .attr("class", "y-axis")
-        .attr("transform", "translate(" + margin.left + ",0)");
+        .attr("transform", "translate(" + marginrace.left + ",0)");
 
     var focus = svg.append("g")
         .attr("class", "focus")
@@ -94,7 +119,7 @@ d3.csv("delegatetime.csv", function (error, data) {
         .attr("stroke-width", 1)
         .style("shape-rendering", "crispEdges")
         .style("opacity", 0)
-        .attr("y1", -height)
+        .attr("y1", -heightrace)
         .attr("y2", -40);
 
     focus.append("text").attr("class", "lineHoverDate")
@@ -103,9 +128,9 @@ d3.csv("delegatetime.csv", function (error, data) {
 
     var overlay = svg.append("rect")
         .attr("class", "overlay")
-        .attr("x", margin.left)
-        .attr("width", width - margin.right - margin.left)
-        .attr("height", height)
+        .attr("x", marginrace.left)
+        .attr("width", widthrace - marginrace.right - marginrace.left)
+        .attr("height", heightrace)
 
     update(d3.select('#selectboxrace').property('value'), 0);
 
@@ -127,7 +152,7 @@ d3.csv("delegatetime.csv", function (error, data) {
 
         svg.selectAll(".y-axis").transition()
             .duration(speed)
-            .call(d3.axisLeft(y).tickSize(-width + margin.right + margin.left).ticks(5)).call(g => {
+            .call(d3.axisLeft(y).tickSize(-widthrace + marginrace.right + marginrace.left).ticks(5)).call(g => {
                 var years = x.ticks(d3.timeYear.every(1))
                 var xshift = 0
                 g.selectAll("text")
@@ -166,11 +191,11 @@ d3.csv("delegatetime.csv", function (error, data) {
         rect.enter().append("rect")
             .attr("class", "lineHoverRect")
             .attr("y", 402.5)
-            .attr("x", 62.5)
+            .attr("x", 862.5)
             .attr("width", 75)
             .attr("height", 25)
             .attr("rx", 10)
-            .attr("transform", (_, i) => "translate(" + i * 100 + ",0)")
+            .attr("transform", (_, i) => "translate(" + i * -100 + ",0)")
             .merge(rect);
 
         var labels = focus.selectAll(".lineHoverText")
@@ -180,7 +205,7 @@ d3.csv("delegatetime.csv", function (error, data) {
             .attr("class", "lineHoverText")
             .attr("text-anchor", "middle")
             .attr("font-size", 14)
-            .attr("dx", (_, i) => 1 + i * 100 + "px")
+            .attr("dx", (_, i) => i * -100 + "px")
             .merge(labels);
 
 
@@ -214,11 +239,11 @@ d3.csv("delegatetime.csv", function (error, data) {
                 d = x0 - d0.date > d1.date - x0 ? d1 : d0;
 
             focus.select(".lineHover")
-                .attr("transform", "translate(" + x(d.date) + "," + height + ")");
+                .attr("transform", "translate(" + x(d.date) + "," + heightrace + ")");
 
             focus.select(".lineHoverDate")
-                .attr("x", 0)
-                .attr("y", 420)
+                .attr("x", x(d.date))
+                .attr("y", e => y(d[e]))
                 .attr("text-anchor", "start")
                 .style("font-size", 12)
                 .style("font-weight", 700)
@@ -234,7 +259,7 @@ d3.csv("delegatetime.csv", function (error, data) {
 
             focus.selectAll(".lineHoverText")
                 .attr("transform",
-                    "translate(" + 100 + "," + 420 + ")").style("font-weight", 700)
+                    "translate(" + 900 + "," + 420 + ")").style("font-weight", 700)
                 .text(e => d[e]);
 
 
@@ -247,16 +272,16 @@ d3.csv("delegatetime.csv", function (error, data) {
 
     var svgLegend = svg.append('g')
         .attr('class', 'gLegend')
-        .attr("transform", "translate(100,390)")
+        .attr("transform", "translate(900,290)")
 
     var legend = svgLegend.selectAll('.legend')
-        .data(cands)
+        .data(candidates)
         .enter().append('g')
         .attr("class", "legend")
-        .attr("transform", function (d, i) { return "translate(" + i * 100 + ",0)" })
-        
-        
-    
+        .attr("transform", function (d, i) { return "translate(" + i * -100 + ",100)" })
+
+
+
 
     legend.append("text")
         .attr("class", "legend-text")
@@ -266,11 +291,11 @@ d3.csv("delegatetime.csv", function (error, data) {
         .style("font-weight", 700)
         .text(d => d)
 
-        var selectbox = d3.select("#selectboxrace")
-		.on("change", function() {
-			update(this.value, 750);
+    var selectbox = d3.select("#selectboxrace")
+        .on("change", function () {
+            update(this.value, 750);
         })
-  
+
 
 })
 

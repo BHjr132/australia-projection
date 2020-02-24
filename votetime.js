@@ -1,17 +1,26 @@
-var margin = { top: 20, right: 20, bottom: 100, left: 30 }
+
+
+// vote time
+
+var margin = { top: 20, right: 100, bottom: 30, left: 30 }
 var width = 1000 - margin.left - margin.right
-var height = 550 - margin.top - margin.bottom
+var height = 400 - margin.top - margin.bottom
 var axisPad = 12
 var demScale = d3.scaleLinear()
     .domain([0, 50])
     .range(["white", "#0091FF"]);
 
+
+
+
 d3.csv("time.csv", function (error, data) {
     var keys = data.columns.slice(1);
 
-    var data = data.filter(function (d) { return d.state == keyState; });
+    var data = data.filter(d => d.state == keyState);
 
     var datatype = "vote"
+
+
 
     var parseTime = d3.timeParse("%Y-%m-%d"),
         formatDate = d3.timeFormat("%b - %d"),
@@ -21,11 +30,47 @@ d3.csv("time.csv", function (error, data) {
 
     data.forEach(function (d) {
         d.date = parseTime(d.forecastdate);
-        //d.primarydate = parseTime(d.primarydate);
         return d;
     })
 
+    var maxdate = d3.max(data, d => d.date)
 
+    var newest_day = d3.max(data, d => d.date)
+
+    var data = data.filter(d => d.date <= maxdate)
+
+    var newest_data = data.filter(d => d.date == d3.max(data, d => d.date))
+
+    var keys = keys.filter(f => f.includes(datatype))
+
+    var col_category = ["#00C181", "#FF6060", "#a4b1b5", "#FFE130", "#FF8D32", "#0091FF", "#FF2EF0", "#AF0BFF", "#a4b1b5"]
+
+    var cand_now = keys.map(function (d, j) {
+        return {
+            candidate: d,
+            value: newest_data.map((i) => +i[d]),
+            color: col_category[j]
+        };
+    });
+
+    cand_now.sort((a, b) => a.value - b.value)
+
+    var keys = cand_now.map((d) =>
+        d.candidate
+    )
+    var color_scale = cand_now.map((d) =>
+        d.color
+    )
+
+    var candidates = keys
+
+    var candidates = candidates.map((d) =>
+        d.slice(0, -4)
+    )
+
+    var candidates = candidates.map((d) =>
+        d[0].toUpperCase() + d.substring(1)
+    )
 
     //today
     var now = d3.max(data, d => d.forecastdate)
@@ -41,92 +86,20 @@ d3.csv("time.csv", function (error, data) {
     });
 
 
-    console.log(now)
-    console.log(nowarray)
-    console.log(asoftoday)
 
-    console.log(data)
 
     var svg = d3.select("#vote").append("svg")
-        .attr("viewBox", "0 0 1000 550")
+        .attr("viewBox", "0 0 1000 400")
         .append('g')
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    var svgnow = svg.append('g')
-        .attr('class', 'gnow')
-        .attr("transform", "translate(100,450)")
 
-    var nowv = svgnow.selectAll('.now')
-        .data(asoftoday)
-        .enter().append('g')
-        .attr("class", "now")
-        .attr("transform", function (d, i) { return "translate(" + i * 100 + ",0)" })
-
-    nowv.append("rect")
-        .attr("y", -17.5)
-        .attr("x", -37.5)
-        .attr("width", 75)
-        .attr("height", 25)
-        .attr("rx", 10)
-        .attr("fill", d => demScale(d.values))
-
-    nowv.append("text")
-        .attr("class", "now-text")
-        .style("fill", "Black")
-        .attr("text-anchor", "middle")
-        .style("font-size", 14)
-        .style("font-weight", 700)
-        .text(d => d.values + "%")
-    //one month ago
-    now = parseTime(now)
-
-    var monthago = formateTime(d3.utcMonth.offset(now, -1))
-
-    var montharray = data.filter(function (d) { return d.forecastdate == monthago; });
-
-    var copythree = keys.filter(f => f.includes(datatype))
-
-    var onemonthago = copythree.map(function (id) {
-        return {
-            values: montharray.map(d => { return +d[id] })
-        };
-    });
-
-    console.log(monthago)
-    console.log(montharray)
-    console.log(onemonthago)
-
-    
-    var svgmonth = svg.append('g')
-        .attr('class', 'gmonth')
-        .attr("transform", "translate(100,480)")
-
-    var monthv = svgmonth.selectAll('.now')
-        .data(onemonthago)
-        .enter().append('g')
-        .attr("class", "month")
-        .attr("transform", function (d, i) { return "translate(" + i * 100 + ",0)" })
-
-    monthv.append("rect")
-        .attr("y", -17.5)
-        .attr("x", -37.5)
-        .attr("width", 75)
-        .attr("height", 25)
-        .attr("rx", 10)
-        .attr("fill", d => demScale(d.values))
-
-    monthv.append("text")
-        .attr("class", "now-text")
-        .style("fill", "Black")
-        .attr("text-anchor", "middle")
-        .style("font-size", 14)
-        .style("font-weight", 700)
-        .text(d => d.values + "%")
 
 
 
     var mindate = new Date(2020, 0, 1),
         maxdate = d3.max(data, d => d.forecastdate)
+    demadjust = new Date(2020, 1, 4);
 
     var x = d3.scaleTime()
         .rangeRound([margin.left, width - margin.right])
@@ -135,8 +108,9 @@ d3.csv("time.csv", function (error, data) {
     var y = d3.scaleLinear()
         .rangeRound([height - margin.bottom, margin.top]);
 
+
     var z = d3.scaleOrdinal()
-        .range(["#00C181", "#FF6060", "#a4b1b5", "#FFC000", "#FF8D32", "#0091FF", "#FF2EF0", "#CD64FF", "#0070C0"])
+        .range(color_scale)
         ;
 
     var line = d3.line()
@@ -172,17 +146,17 @@ d3.csv("time.csv", function (error, data) {
         .attr("x1", x(demadjust))
         .attr("x2", x(demadjust))
         .attr("y1", y(0))
-        .attr("y2", -height)
+        .attr("y2", 10)
         .attr("stroke", "grey")
 
     svg.append("line")
         .attr("x1", x(maxdate))
         .attr("x2", x(maxdate))
         .attr("y1", y(0))
-        .attr("y2", -height)
+        .attr("y2", 30)
         .attr("stroke", "grey")
 
-    
+
 
 
     svg.append("text")
@@ -192,7 +166,7 @@ d3.csv("time.csv", function (error, data) {
         .attr('font-size', '15')
         .attr('font-weight', 500)
         .attr("text-anchor", "end")
-        .text("Demographics Implemented >")
+        .text("Demographic Calculation Implemented >")
 
 
     svg.append("g")
@@ -218,10 +192,11 @@ d3.csv("time.csv", function (error, data) {
     var overlay = svg.append("rect")
         .attr("class", "overlay")
         .attr("x", margin.left)
-        .attr("width", width - margin.right - margin.left)
+        .attr("width", x(newest_day) - margin.left)
         .attr("height", height)
 
-    update(d3.select('#selectboxvote').property('value'), 0);
+    update(datatype, 0);
+
 
     function update(input, speed) {
 
@@ -266,9 +241,15 @@ d3.csv("time.csv", function (error, data) {
         city.enter().insert("g", ".focus").append("path")
             .attr("class", "line cities")
             .style("stroke", d => z(d.id))
+            .style("opacity", d => z(d.id) == "#a4b1b5" ? .3 : 1)
             .merge(city)
             .transition().duration(speed)
             .attr("d", d => line(d.values))
+
+        // var results = final_results[0]
+
+        // console.log(results)
+
 
         tooltip(copy);
     }
@@ -279,22 +260,23 @@ d3.csv("time.csv", function (error, data) {
 
         rect.enter().append("rect")
             .attr("class", "lineHoverRect")
-            .attr("y", 402.5)
-            .attr("x", 62.5)
+            .attr("y", 250)
+            .attr("x", 862.5)
             .attr("width", 75)
             .attr("height", 25)
             .attr("rx", 10)
-            .attr("transform", (_, i) => "translate(" + i * 100 + ",0)")
+            .attr("transform", (_, i) => "translate(0," + i * -30 + ")")
             .merge(rect);
 
         var labels = focus.selectAll(".lineHoverText")
             .data(copy)
 
         labels.enter().append("text")
+            .attr("y", -172.5)
             .attr("class", "lineHoverText")
             .attr("text-anchor", "middle")
             .attr("font-size", 14)
-            .attr("dx", (_, i) => 1 + i * 100 + "px")
+            .attr("dy", (_, i) => 1 + i * -30 + "px")
             .merge(labels);
 
 
@@ -309,7 +291,7 @@ d3.csv("time.csv", function (error, data) {
         circles.enter().append("circle")
             .attr("class", "hoverCircle")
             .style("stroke", d => z(d))
-            .style("stroke-width", 2)
+            .style("stroke-width", 3)
             .style("fill", "white")
             .attr("r", 3)
             .merge(circles);
@@ -331,9 +313,9 @@ d3.csv("time.csv", function (error, data) {
                 .attr("transform", "translate(" + x(d.date) + "," + height + ")");
 
             focus.select(".lineHoverDate")
-                .attr("x", 0)
-                .attr("y", 420)
-                .attr("text-anchor", "start")
+                .attr("x", x(d.date))
+                .attr("y", 0)
+                .attr("text-anchor", "middle")
                 .style("font-size", 12)
                 .style("font-weight", 700)
                 .text(formatDate(d.date));
@@ -348,8 +330,8 @@ d3.csv("time.csv", function (error, data) {
 
             focus.selectAll(".lineHoverText")
                 .attr("transform",
-                    "translate(" + 100 + "," + 420 + ")").style("font-weight", 700)
-                .text(e => d[e] + "%");
+                    "translate(" + 900 + "," + 440 + ")").style("font-weight", 700)
+                .text(e => d[e] == "" ? "-" : d[e] + "%");
 
 
 
@@ -357,57 +339,47 @@ d3.csv("time.csv", function (error, data) {
         }
     }
 
-    var cands = ["Coalition", "Labor", "Greens", "One Nation", "Others"]
+
 
     var svgLegend = svg.append('g')
         .attr('class', 'gLegend')
         .attr("transform", "translate(100,390)")
 
     var legend = svgLegend.selectAll('.legend')
-        .data(cands)
+        .data(candidates)
         .enter().append('g')
         .attr("class", "legend")
-        .attr("transform", function (d, i) { return "translate(" + i * 100 + ",0)" })
+        .attr("transform", function (d, i) { return "translate(720," + i * -30 + ")" })
 
-    svg.append("text")
-        .attr("x", 0)
-        .attr("y", 450)
-        .attr("text-anchor", "start")
-        .style("font-size", 12)
-        .style("font-weight", 700)
-        .text("Today")
-
-    svg.append("text")
-        .attr("x", 0)
-        .attr("y", 480)
-        .attr("text-anchor", "start")
-        .style("font-size", 12)
-        .style("font-weight", 700)
-        .text("Month Ago")
 
     legend.append("text")
         .attr("class", "legend-text")
+        .attr("y", -122.5)
         .style("fill", d => z(d))
         .attr("text-anchor", "middle")
         .style("font-size", 14)
         .style("font-weight", 700)
         .text(d => d)
 
-        svg.append("text")
-        .attr("x", 500)
-        .attr("y", 520)
+    svg.append("text")
+        .attr("x", 900)
+        .attr("y", 0)
         .attr("text-anchor", "middle")
-        .style("font-size", 25)
+        .style("font-size", 15)
         .style("font-weight", 700)
-        .text(keyState=="Australia"?"Projected Vote Share":"Projected Vote in "+keyState)
+        .text(keyState == "Australia" ? "Projected Vote Share" : "Projected Vote in " + keyState)
+    svg.append("line")
+        .attr("x1", x(mindate))
+        .attr("x2", x(mindate))
+        .attr("y1", y(0))
+        .attr("y2", 30)
+        .attr("stroke", "grey")
 
-        svg.append("rect")
-        .attr("y",-50)
-        .attr("x", 930)
-        .attr("width", 75)
-        .attr("height", 390)
-        .attr("rx", 0)
-        .attr("fill", "white")
+
+
+
+
+
 
 
 })

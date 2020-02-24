@@ -36,8 +36,9 @@
 </head>
 
 
-<a class="computer" href="https://jhkforecasts.com"><img  style="height: 75px;margin-left: auto;display: block;margin-right: auto;"src="https://raw.githubusercontent.com/jhkersting/jhkforecasts/master/jhk%20forecasts%20logo-01.jpg"/></a>
-<a class="phone" href="https://jhkforecasts.com"><img  style="height: 50px;margin-left: auto;display: block;margin-right: auto;"src="https://jkstats76.files.wordpress.com/2019/02/cropped-site-icon.png"/></a>
+<a href="https://jhkforecasts.com"><div >
+    <h1 style="font-weight: 300;color: black;text-align: center;">JHK Forecasts</h1>
+    </div></a>
 
 
 <body>
@@ -92,15 +93,14 @@
 
 
 
-  <h1 style="text-align: center;">Iowa</h1>
+  <h1 style="text-align: center;font-size: 35;font-weight: 900; border-bottom: solid;border-top: solid;border-right: solid;border-left: solid;background-color: darkblue;color: white;">Iowa</h1>
   <script>
     var keyState = "Iowa"
   </script>
-  <h2 style="font-weight: 800;margin-left: 20px;">Results</h2>
-  <p style="font-weight: 800;margin-left: 20px;">Results are as of 2/6/20 at 5:18pm ET. </p>
-  <p style="font-weight: 800;margin-left: 20px;">Result & Projected vote share based off of first alignment. </p>
-  <div id="topline"></div>
-  <script src="results.js"></script>
+  <h2 style="font-weight: 800;margin-left: 20px;">Overview</h2>
+  <p> **Projected vote share is for first alignment.**</p>
+  <div class="computer"id="topline"></div><script src="projections.js"></script><div class="phone"id="toplinephone"></div><script src="projectionsphone.js"></script>
+  
    <select id="selectboxvote" class="custom-select" style="width:200px;">
     <option value="vote">Projected Vote Share</option>
   </select>
@@ -158,17 +158,19 @@
   <script src="delegatestime.js"></script>
   <script src="votetime.js"></script>
 
-  <h2 style="font-weight: 800;margin-left: 20px;">Breakdown</h2>
-  <div id="votecalcs"></div>
+  
   <h2 style="font-weight: 800;margin-left: 20px;">Similar States</h2>
 
   <div id="usmap"></div>
   <script src="statemaps.js"></script>
   <h2 style="font-weight: 800;margin-left: 20px;">Latest Polls</h2>
   <div id="polls"></div>
-  <script src="polls.js"></script>
-  <script src="votecalcs.js"></script>
+  <div id = "polls"></div><script src="polls.js"></script>
+  
   <script src="bubblemap.js"></script>
+  <div style="height: 70px;background-color: darkblue;width: 102%;margin-left: -10px;margin-bottom: -10px;">
+    <h4 style="font-weight: 400;color: white;padding-top: 30px;margin-left: 30;">© 2020 JHK FORECASTS</h4>
+  </div>
 
 
 
