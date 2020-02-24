@@ -167,7 +167,7 @@ d3.csv("time.csv", function (error, data) {
 
         })
 
-    demadjust = new Date(2020, 0, 4);
+    demadjust = new Date(2020, 1, 4);
 
     svg.append("line")
         .attr("x1", x(demadjust))
@@ -193,7 +193,7 @@ d3.csv("time.csv", function (error, data) {
         .attr('font-size', '15')
         .attr('font-weight', 500)
         .attr("text-anchor", "end")
-        .text("Demographic Calculation Adjusted >")
+        .text("Demographics Implemented >")
 
 
     svg.append("g")
@@ -358,7 +358,7 @@ d3.csv("time.csv", function (error, data) {
         }
     }
 
-    var cands = ["Biden", "Bloomberg", "Booker", "Buttigieg", "Klobuchar", "Sanders", "Steyer", "Warren", "Yang"]
+    var cands = ["Coalition", "Labor", "Greens,", "One Nation", "Others"]
 
     var svgLegend = svg.append('g')
         .attr('class', 'gLegend')
