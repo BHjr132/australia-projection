@@ -21,7 +21,7 @@ d3.csv("time.csv", function (error, data) {
 
     data.forEach(function (d) {
         d.date = parseTime(d.forecastdate);
-        d.primarydate = parseTime(d.primarydate);
+        //d.primarydate = parseTime(d.primarydate);
         return d;
     })
 
@@ -400,7 +400,7 @@ d3.csv("time.csv", function (error, data) {
         .attr("text-anchor", "middle")
         .style("font-size", 25)
         .style("font-weight", 700)
-        .text(keyState=="US"?"Projected Vote Share":"Projected Vote in "+keyState)
+        .text(keyState=="Australia"?"Projected Vote Share":"Projected Vote in "+keyState)
 
         svg.append("rect")
         .attr("y",-50)
