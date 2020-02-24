@@ -16,7 +16,7 @@ var demScale = d3.scaleLinear()
 d3.csv("time.csv", function (error, data) {
     var keys = data.columns.slice(1);
 
-    var data = data.filter(d => d.state == keyState);
+    var data = data.filter(function (d) { return d.state == keyState; });
 
     var datatype = "vote"
 
@@ -99,7 +99,6 @@ d3.csv("time.csv", function (error, data) {
 
     var mindate = new Date(2020, 0, 1),
         maxdate = d3.max(data, d => d.forecastdate)
-    demadjust = new Date(2020, 1, 4);
 
     var x = d3.scaleTime()
         .rangeRound([margin.left, width - margin.right])
@@ -140,8 +139,6 @@ d3.csv("time.csv", function (error, data) {
 
         })
 
-    demadjust = new Date(2020, 1, 4);
-
     svg.append("line")
         .attr("x1", x(demadjust))
         .attr("x2", x(demadjust))
@@ -155,19 +152,6 @@ d3.csv("time.csv", function (error, data) {
         .attr("y1", y(0))
         .attr("y2", 30)
         .attr("stroke", "grey")
-
-
-
-
-    svg.append("text")
-        .attr("x", x(demadjust) - 5)
-        .attr("y", "20")
-        .attr('fill', 'grey')
-        .attr('font-size', '15')
-        .attr('font-weight', 500)
-        .attr("text-anchor", "end")
-        .text("Demographic Calculation Implemented >")
-
 
     svg.append("g")
         .attr("class", "y-axis")
